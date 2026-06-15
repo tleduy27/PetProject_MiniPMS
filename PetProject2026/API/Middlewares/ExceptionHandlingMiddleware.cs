@@ -45,6 +45,31 @@
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsJsonAsync(response);
             }
+            catch (InvalidOperationException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status409Conflict; // =409
+
+                var response = new
+                {
+                    status = 409,
+                    title = "Conflict",
+                    message = ex.Message
+                };
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(response);
+            }
+            catch (Exception ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError; // = 500
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    status = 500,
+                    title = "Internal Server Error",
+                    message = "Đã có lỗi xảy ra." // KHÔNG lộ ex.Message ra client ở môi trường thật
+                });
+                // TODO: log ex ra file/console để debug (Phase sau dùng ILogger)
+            }
         }
     }
 }
