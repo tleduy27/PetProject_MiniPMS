@@ -15,5 +15,16 @@ namespace PetProject2026.Domain.Entities
 
         // Navigation
         public RoomType RoomType { get; set; } = null!;
+
+        // Bảng chuyển trạng thái hợp lệ: từ -> các đích cho phép
+        private static readonly Dictionary<RoomStatus, RoomStatus[]> _allowed = new()
+        {
+            [RoomStatus.Available] = new[] { RoomStatus.Occupied, RoomStatus.OutOfOrder, RoomStatus.OutOfService },
+            [RoomStatus.Occupied] = new[] { RoomStatus.Available },                       // phải check-out trước
+            [RoomStatus.OutOfOrder] = new[] { RoomStatus.Available, RoomStatus.OutOfService },
+            [RoomStatus.OutOfService] = new[] { RoomStatus.Available, RoomStatus.OutOfOrder },
+        };
+        public bool CanChangeTo(RoomStatus next) =>
+    Status == next || (_allowed.TryGetValue(Status, out var targets) && targets.Contains(next));
     }
-}
+    }

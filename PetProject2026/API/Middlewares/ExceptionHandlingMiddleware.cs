@@ -1,4 +1,6 @@
-﻿namespace PetProject2026.API.Middlewares
+﻿using PetProject2026.Domain.Exception;
+
+namespace PetProject2026.API.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {
@@ -57,6 +59,17 @@
                 };
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsJsonAsync(response);
+            }
+            catch (ConflictException ex)
+            {
+                context.Response.StatusCode = StatusCodes.Status409Conflict; // =409
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    status = 409,
+                    title = "Conflict",
+                    message = ex.Message
+                });
             }
             catch (Exception ex)
             {
