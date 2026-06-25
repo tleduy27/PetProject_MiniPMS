@@ -27,6 +27,13 @@ namespace PetProject2026.API.Controllers
             return Ok(rooms);
         }
 
+        // GET api/rooms/available?roomTypeId=1&checkIn=2026-07-01&checkOut=2026-07-05
+        // Số phòng trống của 1 loại phòng trong khoảng ngày — nền tảng cho Reservation.
+        // Lưu ý: route literal "available" đặt TRƯỚC "{id}" để không bị bắt nhầm vào GetById.
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailable([FromQuery] GetAvailableRoomsQuery query, CancellationToken ct)
+            => Ok(await _mediator.Send(query, ct));
+
         // GET api/rooms/5 -> 404 (NotFoundException) nếu không tồn tại
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id, CancellationToken ct)

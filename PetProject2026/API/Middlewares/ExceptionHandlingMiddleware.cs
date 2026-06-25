@@ -47,19 +47,19 @@ namespace PetProject2026.API.Middlewares
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsJsonAsync(response);
             }
-            catch (InvalidOperationException ex)
-            {
-                context.Response.StatusCode = StatusCodes.Status409Conflict; // =409
+            //catch (InvalidOperationException ex)
+            //{
+            //    context.Response.StatusCode = StatusCodes.Status409Conflict; // =409
 
-                var response = new
-                {
-                    status = 409,
-                    title = "Conflict",
-                    message = ex.Message
-                };
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsJsonAsync(response);
-            }
+            //    var response = new
+            //    {
+            //        status = 409,
+            //        title = "Conflict",
+            //        message = ex.Message
+            //    };
+            //    context.Response.ContentType = "application/json";
+            //    await context.Response.WriteAsJsonAsync(response);
+            //}
             catch (ConflictException ex)
             {
                 context.Response.StatusCode = StatusCodes.Status409Conflict; // =409
